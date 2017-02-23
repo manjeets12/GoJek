@@ -1,7 +1,7 @@
 'use strict'
 
 import React, {Component} from 'react';
-import {View, Text, Image,ListView,TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, Image,ListView,TouchableOpacity, ScrollView,TextInput} from 'react-native';
 
 import api from 'src/common/api';
 import styles from 'src/common/styles';
@@ -23,6 +23,32 @@ export default class AddContact extends Component{
 		return(
 			<View style={styles.container}>
 				<Header title="Add Contact" isBackButton={true}/>
+				<ScrollView style ={{padding:16}}>
+					<View style={styles.centering}>
+						<TouchableOpacity
+		                    onPress={()=>{}} 
+		                    style={styles.profileImageContainer}
+		                    >
+		                    <Image
+				              style={styles.profileImage}
+				              source={require('src/Images/default-avatar.png')}/>
+			            </TouchableOpacity>
+					</View>
+					<View style={{}}>
+						<TextInput autoCapitalize ={'words'} placeholder ="First name"/>
+						<TextInput autoCapitalize ={'words'} placeholder ="Last name"/>
+						<TextInput keyboardType ={'phone-pad'} placeholder ="Mobile Number"/>
+						<TextInput keyboardType ={'email-address'} placeholder ="Email Address"/>
+					</View>
+					<View style={{justifyContent:'flex-end', alignItems:'center'}}>
+						<TouchableOpacity
+		                    onPress={()=>{}} 
+		                    style={styles.profileImageContainer}
+		                    >
+		                    <Text>SAVE</Text>
+			            </TouchableOpacity>
+					</View>
+				</ScrollView>
 			</View>
 		);
 	}

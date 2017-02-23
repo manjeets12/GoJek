@@ -8,6 +8,8 @@ import styles from 'src/common/styles';
 /*Containers*/
 import Contacts from 'src/screens/contacts';
 import AddContact from 'src/screens/addContact';
+import ContactDetails from 'src/screens/contactDetails';
+
 
 let { 
   Navigator,
@@ -19,6 +21,7 @@ let {
 let Routes ={
   contacts:Contacts,
   addContact:AddContact,
+  contactDetails:ContactDetails
 }
 
 class AppNavigator extends Component{
@@ -39,7 +42,6 @@ class AppNavigator extends Component{
 
   //added to handle back button functionality on android
   handleBackButton() {
-
     const {navigator} = this.refs;
     if (navigator && navigator.getCurrentRoutes().length > 1) {
       navigator.pop();

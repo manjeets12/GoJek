@@ -37,6 +37,25 @@ const styles=StyleSheet.create({
     	height:40, 
     	resizeMode:'cover', 
     	borderRadius:20
+    },
+    profileImageContainer:{
+    	height:140,
+        width:140,
+        borderRadius:70,
+        backgroundColor:'#e0e0e0', 
+        justifyContent:'center',
+        alignItems:'center',
+        shadowColor:'#000',
+        shadowOffset:{width: 0, height: 5},
+        shadowOpacity:.4,
+        shadowRadius: 4,
+        elevation:10,
+    },
+    profileImage:{
+    	height:140,
+        width:140,
+        borderRadius:70,
+    	resizeMode:'cover', 
     }
 });
 
