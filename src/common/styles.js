@@ -11,6 +11,12 @@ const styles=StyleSheet.create({
 		justifyContent:'center',
 		alignItems:'center'
 	},
+    centeredRow:{
+        flex:1, 
+        flexDirection:'row', 
+        justifyContent:'center', 
+        alignItems:'center'
+    },
     headerContainer:{
         flexDirection:'row', 
         backgroundColor:'#3f51b5', 

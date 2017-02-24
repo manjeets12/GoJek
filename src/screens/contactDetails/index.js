@@ -3,6 +3,8 @@
 import React, {Component} from 'react';
 import {View, Text, Image,ListView,TouchableOpacity, ScrollView,TextInput,StyleSheet} from 'react-native';
 
+import Share from 'react-native-share';
+
 import {CALL_ICON, HEART_ICON, HEART_ICON_RED, ENVELOPE_ICON} from 'src/common/constants';
 import api from 'src/common/api';
 import styles from 'src/common/styles';
@@ -55,6 +57,7 @@ export default class ContactDetails extends Component{
         this.toggleFavorite = this.toggleFavorite.bind(this);
         this.toggleFavoriteSuccess = this.toggleFavoriteSuccess.bind(this);
         this.toggleFavoriteError = this.toggleFavoriteError.bind(this);
+        this.shareContact = this.shareContact.bind(this);
 	}
 	/*componentWillMount(){
 		
@@ -79,7 +82,6 @@ export default class ContactDetails extends Component{
 				first_name, 
 				last_name, 
 				profile_pic, 
-				url, 
 				email,
 				phone_number,
 				favorite
@@ -110,17 +112,29 @@ export default class ContactDetails extends Component{
 	toggleFavoriteError(error){
 		console.log(error);
 	}
+	shareContact(){
+		let {first_name, last_name, profile_pic, url, email,phone_number} = this.state;
+		let fullName = first_name + " " +last_name ;
+		let shareOptions = {
+                title: "React Native",
+      message: "Hola mundo",
+      url: REACT_ICON,
+      subject: "Share Link"
+                //url:url 
+        };
+        Share.open(shareOptions).catch((err) => { err && console.log(err); });
+	}
 	renderRightIcon(){
 		let state = this.state;
 		return(
-			<View style={{flex:1, flexDirection:'row'}}>
+			<View style={styles.centeredRow}>
 				<TouchableOpacity onPress={()=>api.navigator.push({Name:'addContact',data:{...state, title:"Edit Contact"}})}>
 			      <Image
 			        style={styles.headerIcon}
 			        source={require('src/Images/more.png')}
 			      />
 			    </TouchableOpacity>
-			    <TouchableOpacity onPress={()=>api.navigator.push({Name:'addContact',data:{...state, title:"Edit Contact"}})}>
+			    <TouchableOpacity onPress={this.shareContact}>
 			      <Image
 			        style={styles.headerIcon}
 			        source={require('src/Images/share.png')}
