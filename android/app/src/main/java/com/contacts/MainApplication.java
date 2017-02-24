@@ -10,6 +10,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.imagepicker.ImagePickerPackage;
+import cl.json.RNSharePackage;
 
 
 import java.util.Arrays;
@@ -27,7 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new ImagePickerPackage()
+          new ImagePickerPackage(),
+          new RNSharePackage()
       );
     }
   };

@@ -9,5 +9,6 @@ export const HEART_ICON_RED= require('src/Images/heart-red.png');
 export const MORE_ICON = require('src/Images/more.png');
 export const STAR_ICON = require('src/Images/star.png');
 export const USER_ICON = require('src/Images/user.png');
+export const SHARE_ICON = require('src/Images/share.png');
 
 

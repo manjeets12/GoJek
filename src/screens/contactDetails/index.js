@@ -113,12 +113,20 @@ export default class ContactDetails extends Component{
 	renderRightIcon(){
 		let state = this.state;
 		return(
-			<TouchableOpacity onPress={()=>api.navigator.push({Name:'addContact',data:{...state, title:"Edit Contact"}})}>
-		      <Image
-		        style={styles.headerIcon}
-		        source={require('src/Images/more.png')}
-		      />
-		    </TouchableOpacity>
+			<View style={{flex:1, flexDirection:'row'}}>
+				<TouchableOpacity onPress={()=>api.navigator.push({Name:'addContact',data:{...state, title:"Edit Contact"}})}>
+			      <Image
+			        style={styles.headerIcon}
+			        source={require('src/Images/more.png')}
+			      />
+			    </TouchableOpacity>
+			    <TouchableOpacity onPress={()=>api.navigator.push({Name:'addContact',data:{...state, title:"Edit Contact"}})}>
+			      <Image
+			        style={styles.headerIcon}
+			        source={require('src/Images/share.png')}
+			      />
+			    </TouchableOpacity>
+			</View>
 		);
 	}
 	render(){
