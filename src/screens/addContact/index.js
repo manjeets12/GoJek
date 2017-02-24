@@ -30,7 +30,7 @@ const isValidPhoneNumber = (phone)=>{
 export default class AddContact extends Component{
 	constructor(props){
 		super(props);
-		let {id, first_name, last_name, profile_pic, url, email,phone_number, title} = props.data;
+		let {id, first_name, last_name, profile_pic, url, email,phone_number, title,favorite} = props.data ||{};
 		this.state = {
             profile_pic:profile_pic || null, 
             first_name:first_name ||'',
@@ -38,7 +38,10 @@ export default class AddContact extends Component{
             email:email||'',
             phone_number:phone_number||'',
             id:id || null,
-            title:title|| "Add Contact"   
+            title:title|| "Add Contact",
+            favorite, 
+            url,
+            uploadedImage:null,
         }
         this.updateInputState = this.updateInputState.bind(this);
         this.addContact = this.addContact.bind(this);
@@ -48,14 +51,6 @@ export default class AddContact extends Component{
 	}
 	
 	openImagePicker(){
-
-		/*ImagePicker.launchCamera(options, (response)  => {
-		  // Same code as in above section!
-		  let source = { uri: response.uri };
-		    this.setState({
-		      avatarSource: source
-		    });
-		});*/
 		ImagePicker.showImagePicker(imageOptions, (response) => {
 		  console.log('Response = ', response);
 
@@ -67,7 +62,8 @@ export default class AddContact extends Component{
 		  }
 		  else {
 		    this.setState({
-		      profile_pic: response.uri
+		      profile_pic: response.uri,
+		      uploadedImage:response.data,
 		    });
 		  }
 		});
@@ -85,21 +81,22 @@ export default class AddContact extends Component{
 			alert("Mobile Phone Number not valid");
 			return;
 		}
+		let {id, first_name, last_name, profile_pic, url, email,phone_number, title, favorite, uploadedImage} = this.state;
+		
 		let params = {
-                method:'contacts.json',
-                type:"POST",
+                method:(!id)?'contacts.json':'contacts/'+id+'.json',
+                type:(title ==="Edit Contact")?"PUT":"POST",
                 onSuccess:this.addContactSuccess,
                 onError:this.addContactError,
                 input:{
-                	first_name:this.state.first_name, 
-                	last_name:this.state.last_name,
-                	phone_number:this.state.phone_number,
-                	email:this.state.email,
-                	favorite:false,
+                	first_name:first_name, 
+                	last_name:last_name,
+                	phone_number:phone_number,
+                	email:email,
                 }
             } 
-        if(this.state.avatarSource){
-        	params.input.profile_pic = this.state.avatarSource.uri
+        if(uploadedImage){
+        	params.input.profile_pic = uploadedImage
         }
 		api.request(params);
 
@@ -151,7 +148,7 @@ export default class AddContact extends Component{
 		                    onPress={this.addContact} 
 		                    style={styles.saveButton}
 		                    >
-		                    <Text style={styles.saveButtonText}>SAVE</Text>
+		                    <Text style={styles.saveButtonText}>{(title==="Add Contact")?"SAVE":"UPDATE"}</Text>
 			            </TouchableOpacity>
 					</View>
 				</ScrollView>

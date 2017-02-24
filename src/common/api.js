@@ -36,20 +36,6 @@ var api = {
             }catch(error){
                 return params.onError(error);
             }
-             /*try {
-                    var response = await fetch(url, options);
-                }catch(error){
-                  console.log(error);
-                  return params.onError(error);
-                }
-                try{
-                     let body = await response.json();
-                     console.log(body);
-                     return params.onSuccess(body);
-                }catch(error){
-                  console.log(error);
-                  return params.onError(error);
-              }*/
         }
     },
     sortAndGroup(data){
@@ -75,11 +61,11 @@ var api = {
 
     openURL(user){
         try{
-                 Linking.canOpenURL(user).then(supported => {
+                Linking.canOpenURL(user).then(supported => {
                 if (supported) {
                   Linking.openURL(user);
                 } else {
-                  console.log('Don\'t know how to open URI: ' + user);
+                  console.log('Please try again letter');
                 }
               });
             }

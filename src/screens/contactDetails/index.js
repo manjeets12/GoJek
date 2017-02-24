@@ -3,10 +3,39 @@
 import React, {Component} from 'react';
 import {View, Text, Image,ListView,TouchableOpacity, ScrollView,TextInput,StyleSheet} from 'react-native';
 
-import {CALL_ICON, HEART_ICON, ENVELOPE_ICON} from 'src/common/constants';
+import {CALL_ICON, HEART_ICON, HEART_ICON_RED, ENVELOPE_ICON} from 'src/common/constants';
 import api from 'src/common/api';
 import styles from 'src/common/styles';
 import Header from '../Header';
+
+const ContentLines =({value, iconSource, textStyle, performAction})=>{
+
+	return (
+		<View style={localStyles.fieldContainer}>
+			<TouchableOpacity
+                onPress={performAction}>
+                <Image
+	              style={styles.headerIcon}
+	              source={iconSource}/>
+            </TouchableOpacity>
+            <View style={[styles.centering, {marginLeft:10}]}>
+               <Text style={textStyle}>{value}</Text>
+         	</View>
+		</View>
+	);
+};
+ContentLines.propTypes={
+    value:React.PropTypes.string,
+    iconSource:React.PropTypes.number,
+    textStyle:Text.propTypes.style,
+    performAction:React.PropTypes.func
+};
+ContentLines.defaultProps = {
+  value: '',
+  iconSource:0,
+  textStyle:{},
+  performAction:()=>{}
+};
 
 export default class ContactDetails extends Component{
 	constructor(props){
@@ -23,6 +52,9 @@ export default class ContactDetails extends Component{
         this.getDetails = this.getDetails.bind(this);
         this.detailsSuccess = this.detailsSuccess.bind(this);
         this.detailsError = this.detailsError.bind(this);
+        this.toggleFavorite = this.toggleFavorite.bind(this);
+        this.toggleFavoriteSuccess = this.toggleFavoriteSuccess.bind(this);
+        this.toggleFavoriteError = this.toggleFavoriteError.bind(this);
 	}
 	/*componentWillMount(){
 		
@@ -58,6 +90,26 @@ export default class ContactDetails extends Component{
 	detailsError(error){
 		console.log(error);
 	}
+	toggleFavorite(){
+		let {id,favorite} = this.state;
+		let params = {
+                method:'contacts/'+id+'.json',
+                type:"PUT",
+                onSuccess:this.toggleFavoriteSuccess,
+                onError:this.toggleFavoriteError,
+                input:{favorite : !favorite}
+        } 
+		api.request(params);
+	}
+	toggleFavoriteSuccess(respone){
+		if(respone){
+			this.setState({favorite:respone.favorite});
+		   console.log(respone);
+		}
+	}
+	toggleFavoriteError(error){
+		console.log(error);
+	}
 	renderRightIcon(){
 		let state = this.state;
 		return(
@@ -86,43 +138,27 @@ export default class ContactDetails extends Component{
 				              source={{uri:profile_pic}}/>
                  		)}
 					</View>
-					<View style={localStyles.fieldContainer}>
-						<TouchableOpacity
-		                    onPress={()=>{}}>
-		                    <Image
-				              style={styles.headerIcon}
-				              source={require('src/Images/heart.png')}/>
-		                </TouchableOpacity>
-			            <View style={[styles.centering, {marginLeft:10}]}>
-	                       <Text style={localStyles.heavyText}>{first_name+" "+last_name}</Text>
-	                 	</View>
-					</View>
+					<ContentLines 
+						value = {first_name+" "+last_name} 
+						iconSource ={(!favorite)?HEART_ICON:HEART_ICON_RED} 
+						textStyle={localStyles.heavyText}
+						performAction={this.toggleFavorite}/>
 					{phone_number && 
-						<View style={localStyles.fieldContainer}>
-							<TouchableOpacity
-		                    onPress={()=>{}}>
-			                    <Image
-					              style={styles.headerIcon}
-					              source={require('src/Images/call.png')}/>
-			                </TouchableOpacity>
-				            <View style={[styles.centering, {marginLeft:10}]}>
-		                       <Text style={localStyles.smallText}>{phone_number}</Text>
-		                 	</View>
-						</View>
+						<ContentLines 
+							value = {phone_number} 
+							iconSource ={CALL_ICON} 
+							textStyle={localStyles.smallText}
+							performAction={()=>{api.openURL('tel:'+phone_number)}}/>
 					}
 					{email && 
-						<View style={localStyles.fieldContainer}>
-							<TouchableOpacity
-			                    onPress={()=>{}}>
-			                    <Image
-					              style={styles.headerIcon}
-					              source={ENVELOPE_ICON}/>
-			                </TouchableOpacity>
-				            <View style={[styles.centering, {marginLeft:10}]}>
-		                       <Text style={localStyles.smallText}>{email}</Text>
-		                 	</View>
-						</View>
+						<ContentLines 
+							value ={email} 
+							iconSource ={ENVELOPE_ICON} 
+							textStyle ={localStyles.smallText}
+							performAction={()=>{api.openURL('mailto:'+email)}}/>
 					}
+
+					
 				</ScrollView>
 			</View>
 		);
