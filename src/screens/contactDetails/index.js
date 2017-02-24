@@ -114,13 +114,12 @@ export default class ContactDetails extends Component{
 	}
 	shareContact(){
 		let {first_name, last_name, profile_pic, url, email,phone_number} = this.state;
-		let fullName = first_name + " " +last_name ;
+		let fullName = ""+first_name + " " +last_name ;
 		let shareOptions = {
-                title: "React Native",
-      message: "Hola mundo",
-      url: REACT_ICON,
-      subject: "Share Link"
-                //url:url 
+				title: fullName,
+			    message: phone_number || email,
+			    subject: fullName,
+			    //url:url
         };
         Share.open(shareOptions).catch((err) => { err && console.log(err); });
 	}

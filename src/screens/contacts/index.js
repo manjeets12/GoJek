@@ -1,15 +1,17 @@
 'use strict'
 
 import React, {Component} from 'react';
-import {View, Text, Image,ListView,TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, Image,ListView,TouchableOpacity, ScrollView,ActivityIndicator} from 'react-native';
+import { connect, bindActionCreators } from 'react-redux'
 
+import {fetchContacts} from 'src/actions'
 import api from 'src/common/api';
 import styles from 'src/common/styles';
 import Header from '../Header';
 
 let ds = new ListView.DataSource(
          {rowHasChanged: (r1, r2) => r1!== r2});
-export default class Contacts extends Component{
+class Contacts extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -20,24 +22,39 @@ export default class Contacts extends Component{
         this.contactsSuccess = this.contactsSuccess.bind(this);
         this.contactsError = this.contactsError.bind(this);
         this.renderContacts = this.renderContacts.bind(this);
+        this.renderLoader = this.renderLoader.bind(this);
 	}
 	componentDidMount(){
-		let params = {
+		this.props.fetchContacts();
+		/*let params = {
                 method:'contacts.json',
                 type:"GET",
                 onSuccess:this.contactsSuccess,
                 onError:this.contactsError,
             } 
-		api.request(params);
+		api.request(params);*/
+	}
+	componentWillReceiveProps(nextProps) {
+		let {contacts, groups}= nextProps.contacts;
+		if(groups){
+			let options = {};
+			Object.keys(groups).forEach((key, index)=>{
+				options[key] = ds.cloneWithRows(groups[key]);
+			});
+			this.setState(options);
+			this.setState({options:true});
+		}
+		
 	}
 	shouldComponentUpdate(nextProps, nextState){
-     	return nextState.options;
+		return ((this.props != nextProps) || nextState.options);
+     	//return nextState.options;
  	}
 	contactsSuccess(response){
 		if(response && response.length){
-			let contacts = api.sortAndGroup(response);
-			this.setState({contacts:contacts});
-			console.log(contacts);
+			//let contacts = api.sortAndGroup(response);
+			//this.setState({contacts:contacts});
+			//console.log(contacts);
 			let options = {};
 			Object.keys(contacts).forEach((key, index)=>{
 				options[key] = ds.cloneWithRows(contacts[key]);
@@ -59,9 +76,10 @@ export default class Contacts extends Component{
 	}
 	renderContacts(){
 		let _this =this;
+		let {contacts, groups}= this.props.contacts;
 		return(
 			<View style ={{flex:1}}>
-				{this.state.contacts && Object.keys(this.state.contacts).map((key) => {
+				{groups && Object.keys(groups).map((key) => {
                     return (
 	                    <View style ={{flex:1, flexDirection:'row'}} key={key}>
 	                    	<View style ={{flex:2,}}>
@@ -115,12 +133,23 @@ export default class Contacts extends Component{
 	     </TouchableOpacity>
 	     );
 	}
+	renderLoader(){
+		return(
+			<ActivityIndicator
+		        animating={true}
+		        style={[styles.centering, {height: 80}]}
+		        size="large"
+		     />
+		);
+	}
 	render(){
+		let {isFetching, isFailed, error}= this.props.contacts;
 		return(
 			<View style={styles.container}>
 				<Header title="Contact Book" isBackButton={false} renderRightIcon ={this.renderRightIcon.bind(this)}/>
 				<ScrollView style={{marginLeft:16, marginRight:16,}}>
-					{this.renderContacts()}
+					{isFetching && this.renderLoader()}
+					{this.state.options && this.renderContacts()}
 				</ScrollView>
 				<TouchableOpacity
 	                    onPress={()=>{api.navigator.push({Name :'addContact'})}} 
@@ -132,3 +161,17 @@ export default class Contacts extends Component{
 		);
 	}
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchContacts: () => dispatch(fetchContacts()),
+  }
+};
+
+const mapStateToProps = (state) => {
+	console.log(state.contacts);
+   return {
+       contacts:state.contacts,
+   };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Contacts);

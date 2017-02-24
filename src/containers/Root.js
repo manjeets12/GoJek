@@ -6,7 +6,9 @@ var {
   View,
   Dimensions,
 }=ReactNative
+import {Provider} from 'react-redux';
 
+var configureStore = require('src/data/store');
 import AppNavigator from './AppNavigator';
 
 const { width, height } = Dimensions.get('window');
@@ -14,13 +16,17 @@ const { width, height } = Dimensions.get('window');
 class Root extends Component {
     constructor() {
       super();
+      this.state = {
+        isLoading: true,
+        store: configureStore(() => this.setState({isLoading: false})),
+      };
     }
   
   render() {
       return (
-        <View style={{flex:1}}>
+        <Provider store={this.state.store}>
           <AppNavigator initialRoute={{Name :'contacts'}}/>
-        </View>
+        </Provider>
       );
   }
 }

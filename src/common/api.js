@@ -38,6 +38,28 @@ var api = {
             }
         }
     },
+    sortContacts(data){
+      return data.sort((a, b)=>{
+                let aName = ((a.first_name || "") + " " + (a.last_name || "")).toLowerCase();
+                let bName = ((b.first_name || "") + " " + (b.last_name || "")).toLowerCase();
+                if(aName < bName) return -1;
+                if(aName > bName) return 1;
+                return 0;
+              });
+    },
+    groupContacts(data){
+      let groups = {};
+      for (let i = 0; i < data.length; i++) {
+        let groupName = (data[i].favorite)?"Favorite":data[i].first_name.substring(0,1).toUpperCase();
+        if (!groups[groupName]) {
+          groups[groupName] = [];
+        }
+        groups[groupName].push(data[i]);
+      }
+      console.log(groups);
+      return groups;
+    },
+
     sortAndGroup(data){
       let groups = {};
       for (let i = 0; i < data.length; i++) {
