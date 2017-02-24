@@ -16,16 +16,28 @@ var api = {
         if (params) {
             let contentType ="application/json; charset=utf-8";
             let url = BASE_URL + params.method;
+            let options ={
+                  method: params.type,
+                  dataType: 'json',
+                  headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': contentType,
+                  },
+            };
+            if(params.input){
+              options.body = JSON.stringify(params.input);
+            }
             console.log(params);
-             try {
-                      var response = await fetch(url, {
-                      method: params.type,
-                      dataType: 'json',
-                      headers: {
-                       'Accept': 'application/json',
-                       'Content-Type': contentType,
-                      },
-                    });
+            try{
+                let response = await fetch(url, options);
+                let body = await response.json();
+                console.log(body);
+                return params.onSuccess(body);
+            }catch(error){
+                return params.onError(error);
+            }
+             /*try {
+                    var response = await fetch(url, options);
                 }catch(error){
                   console.log(error);
                   return params.onError(error);
@@ -37,7 +49,7 @@ var api = {
                 }catch(error){
                   console.log(error);
                   return params.onError(error);
-              }
+              }*/
         }
     },
     sortAndGroup(data){
@@ -56,6 +68,9 @@ var api = {
     updateNavigator(_navigator){
       if(_navigator)
           this.navigator = _navigator;
+    },
+    showContactDetails(data){
+      this.navigator.push({Name:'contactDetails', data:data});
     },
 
     openURL(user){

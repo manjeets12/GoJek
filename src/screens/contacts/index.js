@@ -50,6 +50,13 @@ export default class Contacts extends Component{
 	contactsError(error){
 		console.log(error);
 	}
+	renderRightIcon(){
+		return(
+			<Image
+		        style={styles.headerIcon}
+		        source={require('src/Images/user.png')}/>
+		);
+	}
 	renderContacts(){
 		let _this =this;
 		return(
@@ -85,7 +92,7 @@ export default class Contacts extends Component{
 	  return( 
 	  	<TouchableOpacity
 	         underlayColor="#E0E0E0"
-	         onPress ={()=>{}}
+	         onPress ={()=>{api.showContactDetails(rowData)}}
 	         style={{flex:1, }}
 	          >
 	           <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingLeft:10, paddingRight:10, paddingTop:10, paddingBottom:10}}>              
@@ -111,7 +118,7 @@ export default class Contacts extends Component{
 	render(){
 		return(
 			<View style={styles.container}>
-				<Header title="Contact Book" isBackButton={false} rightIcon="user"/>
+				<Header title="Contact Book" isBackButton={false} renderRightIcon ={this.renderRightIcon.bind(this)}/>
 				<ScrollView style={{marginLeft:16, marginRight:16,}}>
 					{this.renderContacts()}
 				</ScrollView>

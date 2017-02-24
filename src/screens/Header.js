@@ -10,19 +10,20 @@ import {
     Platform,
 } from 'react-native';
 
+import styles from 'src/common/styles';
 import api from 'src/common/api';
 
 const {height, width} = Dimensions.get('window');
 
 const Header =(props)=>{
-	let {title, isBackButton,rightIcon} =props;
+	let {title, isBackButton,rightIcon,renderRightIcon} =props;
     return (
          <View style={styles.headerContainer}>
              <View style={styles.sideContainer}>
              	{(isBackButton && 
              	<TouchableOpacity onPress={()=>api.navigator.pop()}>
 			      <Image
-			        style={styles.backButton}
+			        style={styles.headerIcon}
 			        source={require('src/Images/back-arrow.png')}
 			      />
 			    </TouchableOpacity>)}
@@ -31,11 +32,7 @@ const Header =(props)=>{
              	<Text style={[styles.boldText,{paddingLeft:20}]}>{title}</Text>
              </View>
              <View style={styles.sideContainer}>
-             	 {(rightIcon && 
-             	 	<Image
-			        style={styles.backButton}
-			        source={require('src/Images/user.png')}
-			      />)}
+             	{renderRightIcon()}
              </View>
         </View>
     );
@@ -44,48 +41,12 @@ Header.propTypes={
     title:React.PropTypes.string.isRequired,
     rightIcon:React.PropTypes.string,
     isBackButton:React.PropTypes.bool,
+    renderRightIcon:React.PropTypes.func
 };
 Header.defaultProps = {
   title: '',
   isBackButton:true,
+  renderRightIcon:()=>{}
 };
-
-var styles =  StyleSheet.create({
-	centering:{
-		justifyContent:'center',
-		alignItems:'center'
-	},
-	headerContainer:{
-		flexDirection:'row', 
-		backgroundColor:'#3f51b5', 
-		height:50, 
-		alignItems:'center', 
-		paddingLeft:16,
-		paddingRight:16,
-		elevation:10,
-		shadowOffset:{width: 0, height: 5},
-        shadowOpacity:.4,
-        shadowRadius: 4,
-	},
-	middleContainer:{
-		flex:8,
-		justifyContent:'center',
-	},
-	sideContainer:{
-		flex:1,
-		justifyContent:'center',
-		alignItems:'center'
-	},
-	boldText:{
-		fontWeight: 'bold', 
-		fontSize:20,
-		color:'#fbfbfd'
-	},
-	backButton:{
-		height:20,
-		width:20,
-		resizeMode:'contain'
-	},
-});
 
 module.exports = Header;
