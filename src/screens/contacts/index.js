@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {View, Text, Image,ListView,TouchableOpacity, ScrollView,ActivityIndicator} from 'react-native';
 import { connect, bindActionCreators } from 'react-redux'
 
-import {fetchContacts} from 'src/actions'
+import {fetchContacts, groupContacts} from 'src/actions'
 import api from 'src/common/api';
 import styles from 'src/common/styles';
 import Header from '../Header';
@@ -36,7 +36,8 @@ class Contacts extends Component{
 	}
 	componentWillReceiveProps(nextProps) {
 		let {contacts, groups}= nextProps.contacts;
-		if(groups){
+		let {contacts: oldContacts, groups: oldGroups}= this.props.contacts;
+		if(oldGroups != groups){
 			let options = {};
 			Object.keys(groups).forEach((key, index)=>{
 				options[key] = ds.cloneWithRows(groups[key]);
@@ -44,6 +45,10 @@ class Contacts extends Component{
 			this.setState(options);
 			this.setState({options:true});
 		}
+		if(oldContacts && oldContacts.length && oldContacts!= contacts){
+			this.props.groupContacts(contacts);
+		}
+
 		
 	}
 	shouldComponentUpdate(nextProps, nextState){
@@ -83,9 +88,9 @@ class Contacts extends Component{
                     return (
 	                    <View style ={{flex:1, flexDirection:'row'}} key={key}>
 	                    	<View style ={{flex:2,}}>
-	                    		{(key ==='Favorite')?(
+	                    		{(key ==='0')?(
 	                    			<Image
-								        style={{height:20,width:20, Mode:'contain'}}
+								        style={{height:20,width:20, resizeMode:'contain',marginTop:20}}
 								        source={require('src/Images/star.png')}
 								      />
 	                    			):(
@@ -165,6 +170,7 @@ class Contacts extends Component{
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchContacts: () => dispatch(fetchContacts()),
+    groupContacts:(response) => dispatch(groupContacts(response)),
   }
 };
 

@@ -50,7 +50,7 @@ var api = {
     groupContacts(data){
       let groups = {};
       for (let i = 0; i < data.length; i++) {
-        let groupName = (data[i].favorite)?"Favorite":data[i].first_name.substring(0,1).toUpperCase();
+        let groupName = (data[i].favorite)?"0":data[i].first_name.substring(0,1).toUpperCase();
         if (!groups[groupName]) {
           groups[groupName] = [];
         }
@@ -60,7 +60,7 @@ var api = {
       return groups;
     },
 
-    sortAndGroup(data){
+    /*sortAndGroup(data){
       let groups = {};
       for (let i = 0; i < data.length; i++) {
         let groupName = (data[i].favorite)?"Favorite":data[i].first_name.substring(0,1).toUpperCase();
@@ -71,7 +71,7 @@ var api = {
       }
       console.log(groups);
       return groups;
-    },
+    },*/
 
     updateNavigator(_navigator){
       if(_navigator)

@@ -3,8 +3,10 @@
 import React, {Component} from 'react';
 import {View, Text, Image,ListView,TouchableOpacity, ScrollView,TextInput,StyleSheet} from 'react-native';
 
+import { connect, bindActionCreators } from 'react-redux'
 import Share from 'react-native-share';
 
+import {updateContact} from 'src/actions'
 import {CALL_ICON, HEART_ICON, HEART_ICON_RED, ENVELOPE_ICON} from 'src/common/constants';
 import api from 'src/common/api';
 import styles from 'src/common/styles';
@@ -39,7 +41,7 @@ ContentLines.defaultProps = {
   performAction:()=>{}
 };
 
-export default class ContactDetails extends Component{
+class ContactDetails extends Component{
 	constructor(props){
 		super(props);
 		let {id, first_name, last_name, profile_pic, url} = props.data;
@@ -106,7 +108,8 @@ export default class ContactDetails extends Component{
 	toggleFavoriteSuccess(respone){
 		if(respone){
 			this.setState({favorite:respone.favorite});
-		   console.log(respone);
+			this.props.updateContact(respone);
+		    //console.log(respone);
 		}
 	}
 	toggleFavoriteError(error){
@@ -206,3 +209,14 @@ const localStyles=StyleSheet.create({
 		color:'#525252'
 	}
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateContact: (user) => dispatch(updateContact(user)),
+  }
+};
+
+const mapStateToProps = (state) => {
+	return {};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ContactDetails);

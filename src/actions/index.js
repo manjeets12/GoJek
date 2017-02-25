@@ -3,6 +3,13 @@
 import {FETCH_CONTACTS_REQUEST, FETCH_CONTACTS_SUCCESS, FETCH_CONTACTS_EROOR,GROUP_CONTACTS, ADD_CONTACT, UPDATE_CONTACT} from 'src/actions/types';
 import api from 'src/common/api';
 
+export const updateContact = function(user){
+  return{
+    type:UPDATE_CONTACT,
+    user
+  }
+}
+
 export const fetchContactsRequest= function(){
    return{
    	type:FETCH_CONTACTS_REQUEST,
@@ -50,7 +57,6 @@ export const fetchContacts = function(params) {
         dispatch(groupContacts(sorted));
       })
       .catch((error) => {
-        console.log(error);
         dispatch(fetchContactsError(error))
       });
   }

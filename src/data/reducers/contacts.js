@@ -1,5 +1,8 @@
 'use strict';
+
 import {FETCH_CONTACTS_REQUEST,FETCH_CONTACTS_SUCCESS,FETCH_CONTACTS_EROOR, GROUP_CONTACTS, ADD_CONTACT, UPDATE_CONTACT} from 'src/actions/types'
+import api from 'src/common/api';
+
 export type State = {
   isFetching:?boolean;
   isFailed:?boolean;
@@ -26,6 +29,14 @@ function contacts(state: State = initialState, action: Action): State {
         return {...state,isFailed:true,isFetching:false, error:action.error};
     case GROUP_CONTACTS:
         return {...state, groups:action.groups};
+        //return {...state, groups:api.groupContacts(...state.contacts)};
+    case UPDATE_CONTACT:
+        let user = action.user;
+        let index = state.contacts.findIndex((a)=>a.id=== user.id);
+        //let contacts = [...state.contacts.slice(0,index),[...state.contacts[index], user], ...state.contacts.slice(index+1)];
+        return {...state, 
+                contacts:[...state.contacts.slice(0,index),{...state.contacts[index], ...user}, ...state.contacts.slice(index+1)]
+            };
     default:
         return state;
   }
