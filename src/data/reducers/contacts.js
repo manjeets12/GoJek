@@ -30,10 +30,13 @@ function contacts(state: State = initialState, action: Action): State {
     case GROUP_CONTACTS:
         return {...state, groups:action.groups};
         //return {...state, groups:api.groupContacts(...state.contacts)};
+    case ADD_CONTACT:
+        return {...state, 
+                contacts:[...state.contacts, {...action.user}]
+            };
     case UPDATE_CONTACT:
         let user = action.user;
         let index = state.contacts.findIndex((a)=>a.id=== user.id);
-        //let contacts = [...state.contacts.slice(0,index),[...state.contacts[index], user], ...state.contacts.slice(index+1)];
         return {...state, 
                 contacts:[...state.contacts.slice(0,index),{...state.contacts[index], ...user}, ...state.contacts.slice(index+1)]
             };

@@ -43,6 +43,11 @@ const styles=StyleSheet.create({
         fontSize:20,
         color:'#fbfbfd'
     },
+    normalText:{
+        justifyContent:'center',
+        alignItems:'center', 
+        fontSize:16
+    },
     headerIcon:{
         height:20,
         width:20,
@@ -105,6 +110,15 @@ const styles=StyleSheet.create({
     saveButtonText:{
         color:'#fff', 
         fontWeight:'bold' 
+    },
+    contactsRow:{
+        flexDirection:'row', 
+        justifyContent:'center', 
+        alignItems:'center', 
+        paddingLeft:10, 
+        paddingRight:10, 
+        paddingTop:10, 
+        paddingBottom:10,
     }
 });
 

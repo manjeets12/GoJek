@@ -9,6 +9,12 @@ export const updateContact = function(user){
     user
   }
 }
+export const addContact = function(user){
+  return{
+    type:ADD_CONTACT,
+    user
+  }
+}
 
 export const fetchContactsRequest= function(){
    return{

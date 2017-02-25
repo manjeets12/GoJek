@@ -52,8 +52,17 @@ class Contacts extends Component{
 		
 	}
 	shouldComponentUpdate(nextProps, nextState){
-		return ((this.props != nextProps) || nextState.options);
+		/*let {contacts, groups, isFetching}= nextProps.contacts;
+		let {contacts: oldContacts, groups: oldGroups, isFetching:oldIsFetching}= this.props.contacts;*/
+		return ((this.props.contacts != nextProps.contacts) || nextState.options);
      	//return nextState.options;
+ 	}
+ 	componentDidUpdate(){
+ 		if(this.state.options){
+ 			this.setState({
+ 				options:false
+ 			});
+ 		}
  	}
 	contactsSuccess(response){
 		if(response && response.length){
@@ -65,7 +74,7 @@ class Contacts extends Component{
 				options[key] = ds.cloneWithRows(contacts[key]);
 			});
 			this.setState(options);
-			this.setState({options:true});
+			//this.setState({options:true});
 			
 		}
 	}
@@ -111,14 +120,14 @@ class Contacts extends Component{
 		);
 	}
 	renderRow(rowData, sectionID, rowID){
-	  let {id, first_name, last_name, profile_pic, url} =rowData
+	  let {id, first_name, last_name, profile_pic, url, updated} =rowData
 	  return( 
 	  	<TouchableOpacity
 	         underlayColor="#E0E0E0"
 	         onPress ={()=>{api.showContactDetails(rowData)}}
 	         style={{flex:1, }}
 	          >
-	           <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingLeft:10, paddingRight:10, paddingTop:10, paddingBottom:10}}>              
+	           <View style={styles.contactsRow}>              
 	                <View style={{flex:2}}>
 	                 	{(profile_pic ==='/images/missing.png')?(
 		                 	<Image
@@ -131,7 +140,7 @@ class Contacts extends Component{
 	                 	)}
 	                </View>
 	                 <View style={{flex:8}}>
-	                       <Text style={{justifyContent:'center',alignItems:'center', fontSize:16}}>{first_name+" "+last_name}</Text>
+	                       <Text style={styles.normalText}>{first_name+" "+last_name}</Text>
 	                 </View>
 	                
 	           </View>

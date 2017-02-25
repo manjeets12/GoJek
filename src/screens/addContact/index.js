@@ -3,6 +3,10 @@
 import React, {Component} from 'react';
 import {View, Text, Image,ListView,TouchableOpacity, ScrollView,TextInput} from 'react-native';
 var ImagePicker = require('react-native-image-picker');
+import { connect, bindActionCreators } from 'react-redux'
+import Share from 'react-native-share';
+
+import {fetchContacts, addContact, updateContact} from 'src/actions'
 
 import api from 'src/common/api';
 import styles from 'src/common/styles';
@@ -27,7 +31,7 @@ const isValidPhoneNumber = (phone)=>{
 	
 };
 
-export default class AddContact extends Component{
+class AddContact extends Component{
 	constructor(props){
 		super(props);
 		let {id, first_name, last_name, profile_pic, url, email,phone_number, title,favorite} = props.data ||{};
@@ -102,9 +106,12 @@ export default class AddContact extends Component{
 
 	}
 	addContactSuccess(response){
-		console.log(response);
+		if(response){
+			(this.state.tite ==="Add Contact")?this.props.addContact({...response,updated:true}):this.props.updateContact(response,updated:true);
+			api.navigator.pop(0);
+		}
 	}
-	addContactError(){
+	addContactError(error){
 		console.log(error);
 	}
 	render(){
@@ -156,3 +163,15 @@ export default class AddContact extends Component{
 		);
 	}
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchContacts: () => dispatch(fetchContacts()),
+    addContact:(user) =>dispatch(addContact(user)),
+    updateContact: (user) => dispatch(updateContact(user)),
+  }
+};
+
+const mapStateToProps = (state) => {
+	return {};
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AddContact);

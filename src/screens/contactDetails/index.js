@@ -108,7 +108,7 @@ class ContactDetails extends Component{
 	toggleFavoriteSuccess(respone){
 		if(respone){
 			this.setState({favorite:respone.favorite});
-			this.props.updateContact(respone);
+			this.props.updateContact({...respone, updated:true});
 		    //console.log(respone);
 		}
 	}
