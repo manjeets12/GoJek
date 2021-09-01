@@ -7,8 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "15.4.2",
-    "react-native": "0.41.2",
+    "react": "16.5.0",
+    "react-native": "0.64.0",
     "react-native-image-picker": "^0.25.5",
     "react-native-share": "^1.0.19",
     "react-redux": "^5.0.3",
